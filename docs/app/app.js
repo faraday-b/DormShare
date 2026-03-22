@@ -1,8 +1,12 @@
 // Import express.js
 const express = require("express");
+const path = require("path");
 
 // Create express app
 var app = express();
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 // Add static files location
 app.use(express.static("static"));
@@ -13,6 +17,29 @@ const db = require('./services/db');
 // Create a route for root - /
 app.get("/", function(req, res) {
     res.send("Hello world!");
+});
+
+//creating route to view user list
+
+// Route to display all users
+app.get('/users', async (req, res) => {
+  try {
+    // Run SQL query to get all users from the database
+    const users = await db.query(
+      'SELECT id, username, email, points FROM users'
+    );
+
+    // Render the 'users.pug' view and pass the data to it
+    res.render('users', {
+      title: 'User List', // Page title
+      users: users        // Data sent to PUG template
+    });
+
+  } catch (err) {
+    // If something goes wrong, log the error and show message
+    console.error(err);
+    res.status(500).send('Error loading users');
+  }
 });
 
 // Create a route for testing the db
