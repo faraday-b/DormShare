@@ -1,7 +1,13 @@
+// Import express
 const express = require("express");
+
+// Create router
 const router = express.Router();
 
+// Route for listings page
 router.get("/listings", function (req, res) {
+
+    // Sample data (temporary until database is used)
     const listings = [
         {
             id: 1,
@@ -29,10 +35,12 @@ router.get("/listings", function (req, res) {
         }
     ];
 
+    // Render page and send data
     res.render("listings", {
         title: "DormShare Listings",
         listings: listings
     });
 });
 
+// Export router
 module.exports = router;

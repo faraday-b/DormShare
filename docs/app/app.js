@@ -17,7 +17,7 @@ app.set("views", path.join(__dirname, "views"));
 const db = require('./services/db');
 
 // Import listing routes
-const listingRoutes = require("./listing");
+const listingRoutes = require("./routes/listing");
 app.use("/", listingRoutes);
 
 // Create a route for root - /
