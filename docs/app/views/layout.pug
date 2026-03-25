@@ -1,0 +1,20 @@
+html 
+    head    
+        title #{pageTitle || 'DormShare'}
+        link(rel="stylesheet", href="/css/style.css")
+    body 
+        //- This is the green top bar
+        header.top-bar
+            nav
+                a(href="/") DormShare
+                span |
+                a(href="/browse") Browse
+                span |
+                a(href="/listings") My Listings
+                span |
+                a(href="/profile") Profile
+                span |
+                a(href="/logout") Logout
+        
+        main.container
+            block content
