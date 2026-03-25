@@ -1,0 +1,54 @@
+/* General Setup */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* 1. The Green Top Bar */
+.top-bar {
+    background-color: #00966b; /* That specific emerald green */
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    border-bottom: 2px solid #000; /* Dark border like in your image */
+}
+
+.top-bar nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+/* 2. The Main Content Container */
+.container {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    justify-content: center; /* Centers the item card */
+}
+
+/* 3. The Item Card (The Green Box in your image) */
+.item-card {
+    border: 1px solid #7eb36a; /* Light green border */
+    padding: 20px;
+    width: 80%;
+    max-width: 800px;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns like your image */
+    gap: 20px;
+}
+
+/* 4. The Request Button */
+.btn-request {
+    background-color: #00966b;
+    color: white;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    float: right;
+}
