@@ -1,3 +1,7 @@
-.git
 node_modules
 npm-debug.log
+db
+.git
+.gitignore
+docker-compose.yml
+.env
