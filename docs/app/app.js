@@ -1,54 +1,62 @@
-// Import express.js
+// Import express and path
 const express = require("express");
 const path = require("path");
 
 // Create express app
 var app = express();
 
-// Add static files location
-app.use(express.static(path.join(__dirname, "../static")));
+// Middleware to handle form data
 app.use(express.urlencoded({ extended: true }));
 
-// Set Pug
+// Serve static files (CSS, images)
+app.use(express.static(path.join(__dirname, "../static")));
+
+// Set Pug as the view engine
 app.set("view engine", "pug");
+
+// Set views folder location
 app.set("views", path.join(__dirname, "views"));
 
-// Get the functions in the db.js file to use
-const db = require('./services/db');
+// Import database functions
+const db = require("./services/db");
 
-// Import listing routes
+// Import listing routes (from routes folder)
 const listingRoutes = require("./routes/listing");
+
+// Use listing routes
 app.use("/", listingRoutes);
 
-// Create a route for root - /
-app.get("/", function(req, res) {
-    res.redirect("/listings");
+// Root route (redirect to listings page)
+app.get("/", function (req, res) {
+    res.redirect("/listings"); // ✅ FIXED (removed res.send)
 });
 
-// Create a route for testing the db
-app.get("/db_test", function(req, res) {
-    sql = 'select * from test_table';
-    db.query(sql).then(results => {
-        console.log(results);
-        res.send(results)
-    }).catch(err => {
-        console.log(err);
-        res.send("Database error");
-    });
+// Database test route
+app.get("/db_test", function (req, res) {
+    let sql = "SELECT * FROM test_table";
+
+    db.query(sql)
+        .then(results => {
+            console.log(results);
+            res.send(results);
+        })
+        .catch(err => {
+            console.error(err);
+            res.send("Database error");
+        });
 });
 
-// Create a route for /goodbye
-app.get("/goodbye", function(req, res) {
+// Simple route
+app.get("/goodbye", function (req, res) {
     res.send("Goodbye world!");
 });
 
-// Create a dynamic route for /hello/<name>
-app.get("/hello/:name", function(req, res) {
-    console.log(req.params);
+// Dynamic route
+app.get("/hello/:name", function (req, res) {
     res.send("Hello " + req.params.name);
 });
 
-// Start server on port 3000
-app.listen(3000,function(){
-    console.log(`Server running at http://127.0.0.1:3000/`);
+// Start server
+app.listen(3000, function () {
+    console.log("Server running at http://127.0.0.1:3000/");
 });
