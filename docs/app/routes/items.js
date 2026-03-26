@@ -30,7 +30,7 @@ router.get("/:id", function (req, res) {
             }
 
             res.render("item-details", {
-                title: "Item Details",
+                pageTitle: "Item Details",
                 item: item
             });
         })
