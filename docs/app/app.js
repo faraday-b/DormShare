@@ -40,29 +40,6 @@ app.get("/db_test", function (req, res) {
         });
 });
 
-// User profile route: /user/:id/profile
-app.get("/user/:id/profile", function (req, res) {
-    var userId = req.params.id;
-
-    var sql = "SELECT id, username, points FROM users WHERE id = ?";
-
-    db.query(sql, [userId])
-        .then(results => {
-            if (results.length > 0) {
-                res.render("profile", {
-                    pageTitle: results[0].username + " - DormShare",
-                    data: results[0]
-                });
-            } else {
-                res.status(404).send("User not found in our system.");
-            }
-        })
-        .catch(err => {
-            console.error("Database error:", err);
-            res.status(500).send("Internal Server Error");
-        });
-});
-
 // Create a route for /goodbye
 app.get("/goodbye", function (req, res) {
     res.send("Goodbye world!");
