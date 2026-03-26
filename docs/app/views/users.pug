@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  .users-page
+    h1.users-heading Users List
+
+    .users-search
+      form.search-form(action="/users", method="GET")
+        input(type="text", name="search", placeholder="Search users...")
+        button.search-btn(type="submit") 🔍
+
+    .users-table-box
+      table.users-table
+        thead
+          tr
+            th Username
+            th Email
+            th Points
+            th Action
+        tbody
+          each user in users
+            tr
+              td= user.username
+              td= user.email
+              td #{user.points} points
+              td
+                a.profile-btn(href=`/user/${user.id}/profile`) View Profile
