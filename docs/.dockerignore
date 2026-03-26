@@ -5,3 +5,4 @@ db
 .gitignore
 docker-compose.yml
 .env
+**/*.sock
