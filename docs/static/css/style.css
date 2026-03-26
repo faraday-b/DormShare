@@ -1,54 +1,162 @@
-/* General Setup */
+/* ===== GENERAL SETUP ===== */
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #efefef;
 }
 
-/* 1. The Green Top Bar */
-.top-bar {
-    background-color: #00966b; /* That specific emerald green */
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-    border-bottom: 2px solid #000; /* Dark border like in your image */
+/* ===== PAGE LAYOUT ===== */
+.page-wrapper {
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
-.top-bar nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: bold;
+/* ===== NAVBAR ===== */
+.top-nav {
+  background-color: #08a66c;
+  color: white;
+  text-align: center;
+  padding: 18px 0;
+  font-size: 18px;
+  border-bottom: 2px solid #1d2b34;
 }
 
-/* 2. The Main Content Container */
-.container {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    justify-content: center; /* Centers the item card */
+.top-nav nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
-/* 3. The Item Card (The Green Box in your image) */
+.top-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.top-nav span {
+  color: white;
+}
+
+/* ===== MAIN CONTENT ===== */
+.content-area {
+  padding: 38px 0 50px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* ===== USERS PAGE ===== */
+.users-page {
+  width: 78%;
+  max-width: 1200px;
+}
+
+.users-heading {
+  font-size: 56px;
+  margin: 0 0 30px 0;
+  color: #2f3a40;
+  font-weight: bold;
+}
+
+/* ===== SEARCH ===== */
+.users-search {
+  margin-bottom: 34px;
+}
+
+.search-form {
+  display: flex;
+  width: 100%;
+}
+
+.search-form input {
+  flex: 1;
+  height: 58px;
+  border: 1px solid #bfc5c9;
+  border-right: none;
+  padding: 0 22px;
+  font-size: 18px;
+  background-color: #f7f7f7;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.search-btn {
+  width: 74px;
+  height: 58px;
+  border: 1px solid #bfc5c9;
+  background-color: #f7f7f7;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* ===== TABLE ===== */
+.users-table-box {
+  border: 1px solid #c7ccd1;
+  background-color: #f7f7f7;
+  overflow: hidden;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+  padding: 22px 28px;
+  text-align: left;
+  font-size: 18px;
+  color: #2f3a40;
+}
+
+.users-table th {
+  background-color: #e8ebee;
+  font-weight: bold;
+}
+
+.users-table tr {
+  border-top: 1px solid #d6dadd;
+}
+
+/* ===== BUTTONS ===== */
+.profile-btn {
+  display: inline-block;
+  background-color: #08a66c;
+  color: white;
+  text-decoration: none;
+  padding: 12px 22px;
+  border: 2px solid #1d2b34;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.profile-btn:hover {
+  opacity: 0.92;
+}
+
+/* ===== ITEM CARD (from second version) ===== */
 .item-card {
-    border: 1px solid #7eb36a; /* Light green border */
-    padding: 20px;
-    width: 80%;
-    max-width: 800px;
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Two columns like your image */
-    gap: 20px;
+  border: 1px solid #7eb36a;
+  background-color: #ffffff;
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
 }
 
-/* 4. The Request Button */
+/* ===== REQUEST BUTTON (from second version) ===== */
 .btn-request {
-    background-color: #00966b;
-    color: white;
-    border: 1px solid #000;
-    padding: 10px 20px;
-    cursor: pointer;
-    font-weight: bold;
-    float: right;
+  background-color: #08a66c;
+  color: white;
+  border: 2px solid #1d2b34;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  float: right;
+}
+
+.btn-request:hover {
+  opacity: 0.9;
 }
