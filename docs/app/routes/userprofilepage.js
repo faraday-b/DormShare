@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// This moves up one level from 'routes' and into 'services' to find your db connection
-const { db } = require('../services/db'); 
+const db = require('../services/db'); 
 
 // User profile route: /user/:id/profile
 router.get("/user/:id/profile", function(req, res) {
@@ -11,8 +10,14 @@ router.get("/user/:id/profile", function(req, res) {
     // Querying your Users table for the specific ID
     var sql = 'SELECT id, username, points FROM Users WHERE id = ?';
 
+    // Ensure db exists before calling .query()
+    if (!db || typeof db.query !== 'function') {
+        console.error("Database connection 'db' is not initialized correctly.");
+        return res.status(500).send("Database configuration error.");
+    }
+
     db.query(sql, [userId]).then(results => {
-        if (results.length > 0) {
+        if (results && results.length > 0) {
             // Render the 'profile.pug' template with the database results
             res.render('profile', { 
                 pageTitle: results[0].username + ' - DormShare', 
