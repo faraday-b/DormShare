@@ -1,0 +1,44 @@
+doctype html
+html
+  head
+    title DormShare Listings
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    .page-wrapper
+      nav.top-nav
+        a(href="/") Dorm Share
+        span |
+        a(href="/listings") Browse
+        span |
+        a(href="#") My Listings
+        span |
+        a(href="#") Profile
+        span |
+        a(href="#") Logout
+
+      .content-area
+        .search-box
+          form.search-form(method="GET", action="/listings")
+            label(for="search") Seach:
+            input#search(type="text", name="search")
+            button.search-icon(type="submit") 🔍
+            select(name="category")
+              option(value="") Category
+              option(value="Electronics") Electronics
+              option(value="Kitchen") Kitchen
+              option(value="Studying") Studying
+              option(value="Clothing") Clothing
+
+        .listings-container
+          each item in listings
+            .listing-card
+              .listing-title= item.title
+              .listing-body
+                .image-box Item Image
+
+                .listing-info
+                  p Category: #{item.category}
+                  p Points: #{item.points}
+
+                .listing-button
+                  a.details-btn(href="#") View Details

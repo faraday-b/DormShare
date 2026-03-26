@@ -11,6 +11,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // Add static files location
 app.use(express.static(path.join(__dirname, "../static")));
+app.use(express.urlencoded({ extended: true }));
 
 // Get the functions in the db.js file to use
 const db = require("./services/db");
@@ -21,14 +22,17 @@ const usersRoutes = require("./routes/users");
 // Use the users list routes
 app.use("/", usersRoutes);
 
-// Routes
-// This imports your new file and connects it to the app
-const userProfileRoutes = require('./routes/userprofilepage');
-app.use('/', userProfileRoutes); 
+// Import user profile routes
+const userProfileRoutes = require("./routes/userprofilepage");
+app.use("/", userProfileRoutes);
+
+// Import listing routes
+const listingRoutes = require("./routes/listing");
+app.use("/", listingRoutes);
 
 // Create a route for root - /
 app.get("/", function(req, res) {
-    res.send("Hello world!");
+    res.redirect("/listings");
 });
 
 // Create a route for testing the db
@@ -39,6 +43,9 @@ app.get("/db_test", function(req, res) {
     db.query(sql).then(results => {
         console.log(results);
         res.send(results);
+    }).catch(err => {
+        console.log(err);
+        res.send("Database error");
     });
 });
 
@@ -53,7 +60,6 @@ app.get("/goodbye", function(req, res) {
 // Responds to a GET request
 app.get("/hello/:name", function(req, res) {
     console.log(req.params);
-
     // Retrieve the 'name' parameter and use it in a dynamically generated page
     res.send("Hello " + req.params.name);
 });
