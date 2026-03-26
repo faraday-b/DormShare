@@ -1,11 +1,12 @@
-version: '3.3'
+version: '3.8'
 services:
   web:
     build:
       context: ./
     volumes:
       - .:/src
-    command: supervisor -e  'js,pug,html' index.js
+      - /src/node_modules
+    command: supervisor -e 'js,pug,html' index.js
     ports:
       - "3000:3000"
     depends_on:

@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  //- Navigation
+  .profile-nav(style="padding: 10px; display: flex; justify-content: space-between; align-items: center;")
+
+  hr(style="border: 0; border-top: 1px solid #7eb36a; margin: 20px 0;")
+
+  //- Profile Card
+  .profile-card(style="border: 2px solid #7eb36a; padding: 30px; margin: 0 auto; max-width: 800px;")
+    .profile-header(style="display: flex; gap: 30px; align-items: flex-start;")
+      
+      //- Profile Picture
+      .image-placeholder(style="border: 1px solid #7eb36a; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; background: #f9f9f9;")
+        p(style="color: #666;") Profile Image
+
+      //- User Details
+      .profile-info(style="flex: 1;")
+        h1(style="margin-top: 0;") #{data.username}'s Profile
+        p(style="font-size: 1.2em; font-weight: bold; color: #00966b;") Balance: #{data.points} Points
+        
+        //- Listings and Reviews
+        div(style="margin-top: 20px; display: flex; gap: 10px;")
+          button(disabled style="background: #e0e0e0; border: 1px solid #999; padding: 10px; cursor: not-allowed;") View Listings
+          button(disabled style="background: #e0e0e0; border: 1px solid #999; padding: 10px; cursor: not-allowed;") Reviews

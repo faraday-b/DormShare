@@ -1,14 +1,17 @@
+/* ===== GENERAL SETUP ===== */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #efefef;
 }
 
+/* ===== PAGE LAYOUT ===== */
 .page-wrapper {
   min-height: 100vh;
   box-sizing: border-box;
 }
 
+/* ===== NAVBAR ===== */
 .top-nav {
   background-color: #08a66c;
   color: white;
@@ -28,20 +31,24 @@ body {
 .top-nav a {
   color: white;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .top-nav span {
   color: white;
 }
 
+/* ===== MAIN CONTENT ===== */
 .content-area {
   padding: 38px 0 50px 0;
+  display: flex;
+  justify-content: center;
 }
 
+/* ===== USERS PAGE ===== */
 .users-page {
   width: 78%;
   max-width: 1200px;
-  margin: 0 auto;
 }
 
 .users-heading {
@@ -51,6 +58,7 @@ body {
   font-weight: bold;
 }
 
+/* ===== SEARCH ===== */
 .users-search {
   margin-bottom: 34px;
 }
@@ -81,6 +89,7 @@ body {
   cursor: pointer;
 }
 
+/* ===== TABLE ===== */
 .users-table-box {
   border: 1px solid #c7ccd1;
   background-color: #f7f7f7;
@@ -109,6 +118,7 @@ body {
   border-top: 1px solid #d6dadd;
 }
 
+/* ===== BUTTONS ===== */
 .profile-btn {
   display: inline-block;
   background-color: #08a66c;
@@ -122,4 +132,31 @@ body {
 
 .profile-btn:hover {
   opacity: 0.92;
+}
+
+/* ===== ITEM CARD (from second version) ===== */
+.item-card {
+  border: 1px solid #7eb36a;
+  background-color: #ffffff;
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ===== REQUEST BUTTON (from second version) ===== */
+.btn-request {
+  background-color: #08a66c;
+  color: white;
+  border: 2px solid #1d2b34;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  float: right;
+}
+
+.btn-request:hover {
+  opacity: 0.9;
 }

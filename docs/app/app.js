@@ -21,6 +21,11 @@ const usersRoutes = require("./routes/users");
 // Use the users list routes
 app.use("/", usersRoutes);
 
+// Routes
+// This imports your new file and connects it to the app
+const userProfileRoutes = require('./routes/userprofilepage');
+app.use('/', userProfileRoutes); 
+
 // Create a route for root - /
 app.get("/", function(req, res) {
     res.send("Hello world!");
@@ -47,8 +52,6 @@ app.get("/goodbye", function(req, res) {
 // At the end of the URL
 // Responds to a GET request
 app.get("/hello/:name", function(req, res) {
-    // req.params contains any parameters in the request
-    // We can examine it in the console for debugging purposes
     console.log(req.params);
 
     // Retrieve the 'name' parameter and use it in a dynamically generated page
