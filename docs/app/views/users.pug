@@ -1,22 +1,27 @@
 extends layout
 
 block content
-  .container
-    h1 User List
+  .users-page
+    h1.users-heading User List
 
-    table
-      thead
-        tr
-          th Username
-          th Email
-          th Points
-          th Action
+    .users-search
+      form.search-form(action="/users", method="GET")
+        input(type="text", name="search", placeholder="Search users...")
+        button.search-btn(type="submit") 🔍
 
-      tbody
-        each user in users
+    .users-table-box
+      table.users-table
+        thead
           tr
-            td= user.username
-            td= user.email
-            td= user.points
-            td
-              a.btn(href=`/users/${user.id}`) View Profile
+            th Username
+            th Email
+            th Points
+            th Action
+        tbody
+          each user in users
+            tr
+              td= user.username
+              td= user.email
+              td #{user.points} points
+              td
+                a.profile-btn(href=`/users/${user.id}`) View Profile
