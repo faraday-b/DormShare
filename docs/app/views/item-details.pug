@@ -1,0 +1,50 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title Item Details
+
+    .top-nav
+      a(href="/") Dorm Share
+      |  | 
+      a(href="/items/1") Browse
+      |  | 
+      a(href="/users") Users
+      |  | 
+      a(href="#") Profile
+      |  | 
+      a(href="/goodbye") Logout
+
+    .details-card
+      .left-section
+        h2.item-name= item.title
+        .image-box
+          p Item Image
+
+      .right-section
+        p
+          strong Owner:
+          |  #{item.owner}
+
+        p
+          strong Category:
+          |  #{item.category}
+
+        p
+          strong Points Required:
+          |  #{item.points_required}
+
+        p
+          strong Status:
+          |  #{item.status}
+
+        .description-box
+          h3 Description
+          p= item.description
+
+        .request-row
+          if item.status === 'Available'
+            form(action=`/items/${item.id}/request`, method="POST")
+              button.request-btn(type="submit") Request Item
+          else
+            button.request-btn.disabled-btn(type="button" disabled) Not Available
