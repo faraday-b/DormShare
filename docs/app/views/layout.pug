@@ -1,4 +1,5 @@
 doctype html
+<<<<<<< HEAD
 html(lang="en")
   head
     meta(charset="UTF-8")
@@ -110,3 +111,25 @@ html(lang="en")
 
   body
     block content
+=======
+html
+  head
+    title #{pageTitle || 'DormShare'}
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    .page-wrapper
+      header.top-nav
+        nav
+          a(href="/") DormShare
+          span |
+          a(href="/browse") Browse
+          span |
+          a(href="/listings") My Listings
+          span |
+          a(href="/profile") Profile
+          span |
+          a(href="/logout") Logout
+
+      main.content-area
+        block content
+>>>>>>> main
