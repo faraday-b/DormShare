@@ -4,42 +4,34 @@ const express = require("express");
 // Create router
 const router = express.Router();
 
+// Import database helper
+const db = require("../services/db");
+
 // Route for listings page
-router.get("/listings", function (req, res) {
+router.get("/listings", async function (req, res) {
+    try {
+        const sql = `
+            SELECT 
+                items.id,
+                items.title,
+                items.points_required,
+                items.status,
+                categories.name AS category
+            FROM items
+            JOIN categories ON items.category_id = categories.id
+        `;
 
-    // Sample data (temporary until database is used)
-    const listings = [
-        {
-            id: 1,
-            title: "Laptop Charger",
-            category: "Electronics",
-            points: "Available"
-        },
-        {
-            id: 2,
-            title: "Blender",
-            category: "Kitchen",
-            points: "Available"
-        },
-        {
-            id: 3,
-            title: "Notebook Set",
-            category: "Studying",
-            points: "Available"
-        },
-        {
-            id: 4,
-            title: "Jacket",
-            category: "Clothing",
-            points: "Available"
-        }
-    ];
+        const listings = await db.query(sql);
 
-    // Render page and send data
-    res.render("listings", {
-        title: "DormShare Listings",
-        listings: listings
-    });
+        res.render("listings", {
+            pageTitle: "DormShare Listings",
+            listings: listings
+        });
+
+    } catch (err) {
+        console.error("Error loading listings:", err);
+        res.status(500).send("Server error: Could not load listings.");
+    }
 });
 
 // Export router
