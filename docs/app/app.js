@@ -39,6 +39,10 @@ app.get("/", function(req, res) {
     res.redirect("/listings");
 });
 
+const authRoutes = require("./routes/auth");
+app.use("/", authRoutes);
+
+
 // Create a route for testing the db
 app.get("/db_test", function(req, res) {
     const sql = "select * from test_table";
