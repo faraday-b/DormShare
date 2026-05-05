@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title My Messages
+
+    if messages.length
+      each message in messages
+        .details-card.message-card
+          .right-section
+            p
+              strong From:
+              |  #{message.sender_name}
+            p
+              strong Item:
+              |  #{message.item_title}
+            p= message.message_text
+            small= message.sent_at
+    else
+      .details-card
+        p No messages yet.

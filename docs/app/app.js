@@ -34,6 +34,9 @@ app.use("/", listingRoutes);
 const itemsRoutes = require("./routes/items");
 app.use("/items", itemsRoutes);
 
+const messagesRoutes = require("./routes/messages");
+app.use("/messages", messagesRoutes);
+
 // Create a route for root - /
 app.get("/", function(req, res) {
     res.redirect("/listings");
@@ -51,6 +54,7 @@ app.get("/db_test", function(req, res) {
         res.send("Database error");
     });
 });
+
 
 // Create a route for /goodbye
 app.get("/goodbye", function(req, res) {

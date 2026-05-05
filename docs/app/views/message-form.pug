@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title Message Owner
+
+    .details-card
+      .right-section
+        h2= item.title
+        p
+          strong Owner:
+          |  #{item.owner_name}
+
+        form(action=`/messages/send/${item.id}`, method="POST")
+          .description-box
+            textarea(name="messageText", placeholder="Write your message here...", required)
+
+          .request-row
+            button.request-btn(type="submit") Send Message

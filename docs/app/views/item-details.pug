@@ -37,3 +37,5 @@ block content
               button.request-btn(type="submit") Request Item
           else
             button.request-btn.disabled-btn(type="button" disabled) Not Available
+           
+            a.request-btn(href=`/messages/new/${item.id}`) Message Owner
