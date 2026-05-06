@@ -332,6 +332,37 @@ body {
   align-items: start;
 }
 
+.my-listings-grid {
+  display: grid;
+  gap: 18px;
+}
+
+.my-listings-section-title {
+  margin: 8px 0 0 0;
+  color: #2f3a40;
+}
+
+.my-listing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.cancelled-listing {
+  background-color: #f1f3f2;
+  border-color: #8b9699;
+}
+
+.cancelled-listing .listing-title,
+.cancelled-listing .listing-info {
+  color: #5f6b70;
+}
+
+.cancelled-listing .image-box {
+  opacity: 0.72;
+}
+
 /* ===== USERS PAGE ===== */
 .users-page {
   width: 78%;

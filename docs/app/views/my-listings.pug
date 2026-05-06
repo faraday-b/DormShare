@@ -1,0 +1,78 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title My Listings
+    p.page-intro These are the items you are offering to lend. Use this page to check what is available, requested, borrowed, or cancelled.
+
+    if success
+      p.success-message= success
+
+    if error
+      p.error-message= error
+
+    .dashboard-actions
+      a.home-btn.primary-btn(href="/items/new") Add New Item
+      a.home-btn.secondary-btn(href="/requests") View Requests
+
+    if activeItems.length || cancelledItems.length
+      .my-listings-grid
+        if activeItems.length
+          h2.my-listings-section-title Active Listings
+        each item in activeItems
+          .listing-card
+            .listing-title= item.title
+            .listing-body
+              .image-box
+                if item.image_data
+                  img.item-thumb(src=item.image_data, alt=`${item.title} image`)
+                else
+                  span Item Image
+
+              .listing-info
+                p
+                  span.category-badge(class=`category-${item.category.toLowerCase()}`)= item.category
+                p Points Required: #{item.points_required}
+                p Condition: #{item.item_condition || "Not added"}
+                p Pickup: #{item.pickup_location || "Not added"}
+                p Requests: #{item.request_count}
+                p
+                  span.status-badge(class=`status-${item.status.toLowerCase()}`)= item.status
+
+              .listing-button.my-listing-actions
+                a.details-btn(href=`/items/${item.id}`) View Details
+                if item.status === "Available"
+                  form(action=`/items/${item.id}/cancel-listing`, method="POST", onsubmit="return confirm('Cancel this listing? Students will no longer be able to request it.')")
+                    button.cancel-btn(type="submit") Cancel Listing
+
+        if cancelledItems.length
+          h2.my-listings-section-title Cancelled Listings
+          each item in cancelledItems
+            .listing-card.cancelled-listing
+              .listing-title= item.title
+              .listing-body
+                .image-box
+                  if item.image_data
+                    img.item-thumb(src=item.image_data, alt=`${item.title} image`)
+                  else
+                    span Item Image
+
+                .listing-info
+                  p
+                    span.category-badge(class=`category-${item.category.toLowerCase()}`)= item.category
+                  p Points Required: #{item.points_required}
+                  p Condition: #{item.item_condition || "Not added"}
+                  p Pickup: #{item.pickup_location || "Not added"}
+                  p Requests: #{item.request_count}
+                  p
+                    span.status-badge(class=`status-${item.status.toLowerCase()}`)= item.status
+
+                .listing-button.my-listing-actions
+                  a.details-btn(href=`/items/${item.id}`) View Details
+                  form(action=`/items/${item.id}/relist`, method="POST", onsubmit="return confirm('Relist this item and make it available for students to request again?')")
+                    button.request-btn(type="submit") Relist Item
+    else
+      .requests-section
+        h2 No Listings Yet
+        p.no-results You have not listed any items yet. Add an item when you are ready to lend something to another student.
+        a.home-btn.primary-btn(href="/items/new") Lend an Item

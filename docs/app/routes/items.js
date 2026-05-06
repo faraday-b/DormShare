@@ -62,6 +62,67 @@ router.post("/new", async function(req, res) {
     }
 });
 
+router.get("/my-listings", async function(req, res) {
+    if (!req.currentUser) {
+        return res.redirect("/login");
+    }
+
+    try {
+        const items = await db.query(
+            `
+                SELECT items.id, items.title, items.description, items.image_data,
+                       items.points_required, items.status, items.item_condition,
+                       items.pickup_location, categories.name AS category,
+                       COUNT(borrow_requests.id) AS request_count
+                FROM items
+                JOIN categories ON items.category_id = categories.id
+                LEFT JOIN borrow_requests ON items.id = borrow_requests.item_id
+                WHERE items.user_id = ?
+                GROUP BY items.id, items.title, items.description, items.image_data,
+                         items.points_required, items.status, items.item_condition,
+                         items.pickup_location, categories.name
+                ORDER BY items.id DESC
+            `,
+            [req.currentUser.id]
+        );
+
+        res.render("my-listings", {
+            pageTitle: "My Listings",
+            activeItems: items.filter(item => item.status !== "Cancelled"),
+            cancelledItems: items.filter(item => item.status === "Cancelled"),
+            success: req.query.success || null,
+            error: req.query.error || null
+        });
+    } catch (err) {
+        console.error("Error loading my listings:", err);
+        res.status(500).send("Could not load your listings.");
+    }
+});
+
+router.post("/:id/relist", async function(req, res) {
+    const itemId = req.params.id;
+
+    if (!req.currentUser) {
+        return res.redirect("/login");
+    }
+
+    try {
+        const result = await db.query(
+            "UPDATE items SET status = 'Available' WHERE id = ? AND user_id = ? AND status = 'Cancelled'",
+            [itemId, req.currentUser.id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.redirect("/items/my-listings?error=Only cancelled listings can be relisted.");
+        }
+
+        res.redirect("/items/my-listings?success=Listing relisted");
+    } catch (err) {
+        console.error("Error relisting item:", err);
+        res.redirect("/items/my-listings?error=Could not relist item.");
+    }
+});
+
 router.post("/:id/cancel-listing", async function(req, res) {
     const itemId = req.params.id;
 
@@ -96,10 +157,10 @@ router.post("/:id/cancel-listing", async function(req, res) {
             );
         });
 
-        res.redirect(`/items/${itemId}?success=Listing cancelled`);
+        res.redirect("/items/my-listings?success=Listing cancelled");
     } catch (err) {
         console.error("Error cancelling listing:", err);
-        res.redirect(`/items/${itemId}?error=${encodeURIComponent(err.message)}`);
+        res.redirect(`/items/my-listings?error=${encodeURIComponent(err.message)}`);
     }
 });
 

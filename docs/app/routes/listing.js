@@ -27,7 +27,8 @@ router.get("/listings", async function (req, res) {
             FROM items
             JOIN categories ON items.category_id = categories.id
             JOIN users ON items.user_id = users.id
-            WHERE 1 = 1
+            WHERE items.status != 'Cancelled'
+            AND users.is_deleted = 0
         `;
 
         if (search) {
