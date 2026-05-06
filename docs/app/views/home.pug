@@ -1,0 +1,83 @@
+extends layout
+
+block content
+  .home-page
+    section.home-hero
+      .home-hero-text
+        h1 DormShare
+        p.home-tagline Borrow what you need. Lend what you have. Save money together.
+        p.home-intro
+          | DormShare is a student sharing platform for borrowing and lending everyday items around university accommodation.
+
+        .home-actions
+          a.home-btn.primary-btn(href="/listings") Browse Items
+          if currentUser
+            a.home-btn.secondary-btn(href="/items/new") Lend an Item
+          else
+            a.home-btn.secondary-btn(href="/register") Create Account
+
+    section.home-section
+      h2 What DormShare Does
+      p
+        | DormShare helps students save money, reduce waste, and support each other by sharing useful items such as chargers, textbooks, kitchen equipment, and formal clothing.
+
+    section.home-section
+      h2 How It Works
+      .home-steps
+        .home-step
+          span.step-number 1
+          h3 List an Item
+          p Add items you are happy to lend, choose a category, and set a points cost.
+
+        .home-step
+          span.step-number 2
+          h3 Request to Borrow
+          p Browse available items and use points to request something from another student.
+
+        .home-step
+          span.step-number 3
+          h3 Return and Earn
+          p When items are returned in good condition, the lender and borrower earn points.
+
+    section.points-highlight
+      h2 Points System
+      p
+        | Everyone starts with 50 points. Borrowing costs points, lending earns points, and responsible returns help build trust across the DormShare community.
+
+    section.home-section
+      h2 Popular Categories
+      .category-links
+        a.category-link(href="/listings?category=1") Electronics
+        a.category-link(href="/listings?category=2") Kitchen
+        a.category-link(href="/listings?category=3") Study
+        a.category-link(href="/listings?category=4") Clothing
+        a.category-link(href="/listings?category=5") Furniture
+        a.category-link(href="/listings?category=6") Books
+        a.category-link(href="/listings?category=7") Cleaning
+        a.category-link(href="/listings?category=8") Sports
+        a.category-link(href="/listings?category=9") Other
+
+    section.home-section
+      h2 Items Students Can Share
+      .example-items
+        span Laptop chargers
+        span Textbooks
+        span Blenders
+        span Interview clothes
+        span Desk lamps
+        span Mini hoovers
+        span Headphones
+        span Study equipment
+
+    section.home-cards
+      .home-card
+        h3 Borrow Items
+        p Find items listed by other students and use points to request what you need.
+
+      .home-card
+        h3 Lend Items
+        p List items you own, approve requests, and earn points when items are returned in good condition.
+
+      .home-card
+        h3 Build Trust
+        p The points system encourages fair participation and responsible borrowing.

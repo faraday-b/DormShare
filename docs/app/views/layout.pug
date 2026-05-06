@@ -9,16 +9,32 @@ html
         nav
           a(href="/") DormShare
           span |
-          a(href="/browse") Browse
+          a(href="/listings") Browse
           span |
-          a(href="/listings") My Listings
-          span |
-          a(href="/profile") Profile
-          span |
-          a(href="/logout") Logout
-          a(href="/login") Login
-          span |
-          a(href="/register") Register
+          if currentUser
+            a(href="/items/new") Lend Item
+            span |
+            a(href="/users") Users
+            span |
+            a(href="/requests") Requests
+              if navCounts && navCounts.requests
+                span.nav-count= navCounts.requests
+            span |
+            a(href="/history") History
+            span |
+            a(href="/messages") Messages
+              if navCounts && navCounts.messages
+                span.nav-count= navCounts.messages
+            span |
+            a(href="/reports") Reports
+            span |
+            a(href=`/user/${currentUser.id}/profile`) Profile
+            span |
+            a(href="/logout") Logout
+          else
+            a(href="/login") Login
+            span |
+            a(href="/register") Register
 
       main.content-area
         block content

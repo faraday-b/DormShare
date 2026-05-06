@@ -1,0 +1,83 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title Messages
+
+    if success
+      p.success-message= success
+
+    if error
+      p.error-message= error
+
+    section.requests-section.message-requests
+      h2 Incoming Message Requests
+
+      if messageRequests.length
+        each message in messageRequests
+          .request-card
+            h3
+              | Request from 
+              a.inline-link(href=`/user/${message.sender_id}/profile`)= message.sender_name
+            if message.item_title
+              p About: #{message.item_title}
+            p.message-time= message.created_at
+            .message-actions
+              form(action=`/messages/${message.id}/accept`, method="POST")
+                button.request-btn(type="submit") Accept and View
+              form(action=`/messages/${message.id}/decline`, method="POST")
+                button.cancel-btn(type="submit") Decline
+      else
+        p.no-results No pending message requests.
+
+    .requests-grid
+      section.requests-section
+        h2 Conversations
+
+        if conversations.length
+          each conversation in conversations
+            .conversation-card
+              .conversation-header
+                h3
+                  | Conversation with 
+                  a.inline-link(href=`/user/${conversation.otherUserId}/profile`)= conversation.otherUserName
+                form(action="/messages/conversation/delete", method="POST")
+                  input(type="hidden", name="other_user_id", value=conversation.otherUserId)
+                  input(type="hidden", name="item_id", value=conversation.itemId)
+                  button.cancel-btn(type="submit") Delete Conversation
+              if conversation.itemTitle
+                p About: #{conversation.itemTitle}
+
+              each message in conversation.messages
+                .message-bubble(class=Number(message.sender_id) === Number(currentUser.id) ? "message-sent" : "message-received")
+                  p.message-author= Number(message.sender_id) === Number(currentUser.id) ? "You" : message.sender_name
+                  p= message.message_text
+                  p.message-time= message.created_at
+                  form(action=`/messages/${message.id}/delete`, method="POST")
+                    button.delete-message-btn(type="submit") Delete
+
+              form.reply-form(action=`/messages/${conversation.messages[conversation.messages.length - 1].id}/reply`, method="POST")
+                .form-group
+                  label(for=`reply_${conversation.otherUserId}`) Reply
+                  textarea(id=`reply_${conversation.otherUserId}`, name="reply_text", required)
+                button.request-btn(type="submit") Send Reply
+        else
+          p.no-results You have no messages.
+
+      section.requests-section
+        h2 Sent Message Requests
+
+        if sent.length
+          each message in sent
+            .request-card
+              h3
+                | To 
+                a.inline-link(href=`/user/${message.receiver_id}/profile`)= message.receiver_name
+              if message.item_title
+                p About: #{message.item_title}
+              p= message.message_text
+              p
+                span.status-badge(class=`status-${message.status.toLowerCase()}`)= message.status
+              p.message-time= message.created_at
+        else
+          p.no-results You have no pending or declined message requests.

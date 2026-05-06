@@ -11,6 +11,14 @@ function isStrongPassword(password) {
            /[^A-Za-z0-9]/.test(password);
 }
 
+function isUniversityEmail(email) {
+    return email.toLowerCase().endsWith("@roehampton.ac.uk");
+}
+
+function setLoginCookie(res, userId) {
+    res.setHeader("Set-Cookie", `userId=${userId}; HttpOnly; Path=/; SameSite=Lax`);
+}
+
 // Show register page
 router.get("/register", function(req, res) {
     res.render("register", {
@@ -26,6 +34,13 @@ router.post("/register", async function(req, res) {
         const email = req.body.email;
         const password = req.body.password;
 
+        if (!isUniversityEmail(email)) {
+            return res.render("register", {
+                pageTitle: "Create Account",
+                error: "Please register using your Roehampton university email address."
+            });
+        }
+
         if (!isStrongPassword(password)) {
             return res.render("register", {
                 pageTitle: "Create Account",
@@ -34,7 +49,7 @@ router.post("/register", async function(req, res) {
         }
 
         const existingUser = await db.query(
-            "SELECT id FROM users WHERE email = ?",
+            "SELECT id FROM users WHERE email = ? AND is_deleted = 0",
             [email]
         );
 
@@ -75,7 +90,7 @@ router.post("/login", async function(req, res) {
         const password = req.body.password;
 
         const users = await db.query(
-            "SELECT id, username, email, points, password_hash FROM users WHERE email = ?",
+            "SELECT id, username, email, points, password_hash, is_banned, is_deleted FROM users WHERE email = ?",
             [email]
         );
 
@@ -88,7 +103,29 @@ router.post("/login", async function(req, res) {
 
         const user = users[0];
 
-        const passwordMatches = await bcrypt.compare(password, user.password_hash);
+        if (user.is_deleted) {
+            return res.render("login", {
+                pageTitle: "Login",
+                error: "This account has been deleted."
+            });
+        }
+
+        if (user.is_banned) {
+            return res.render("login", {
+                pageTitle: "Login",
+                error: "This account has been banned because of repeated reports."
+            });
+        }
+
+        let passwordMatches = false;
+
+        if (!user.password_hash) {
+            passwordMatches = false;
+        } else if (user.password_hash.startsWith("$2")) {
+            passwordMatches = await bcrypt.compare(password, user.password_hash);
+        } else {
+            passwordMatches = password === user.password_hash;
+        }
 
         if (!passwordMatches) {
             return res.render("login", {
@@ -97,12 +134,18 @@ router.post("/login", async function(req, res) {
             });
         }
 
-        res.redirect(`/user/${user.id}/profile`);
+        setLoginCookie(res, user.id);
+        res.redirect("/");
 
     } catch (err) {
         console.error("Login error:", err);
         res.status(500).send("Server error: Could not log in.");
     }
+});
+
+router.get("/logout", function(req, res) {
+    res.setHeader("Set-Cookie", "userId=; HttpOnly; Path=/; Max-Age=0; SameSite=Lax");
+    res.redirect("/login");
 });
 
 module.exports = router;

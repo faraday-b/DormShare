@@ -1,0 +1,44 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title Borrowing History
+
+    .requests-grid
+      section.requests-section
+        h2 Items You Borrowed
+
+        if borrowedHistory.length
+          each record in borrowedHistory
+            .request-card
+              h3= record.title
+              p
+                | Lender: 
+                a.inline-link(href=`/user/${record.lender_id}/profile`)= record.lender_name
+              p Points: #{record.points_cost}
+              p
+                span.status-badge(class=`status-${record.status.toLowerCase()}`)= record.status
+              if record.return_condition
+                p Return Condition: #{record.return_condition}
+              a.details-btn(href=`/history/${record.id}`) View Details
+        else
+          p.no-results You have no borrowing history yet.
+
+      section.requests-section
+        h2 Items You Lent
+
+        if lendingHistory.length
+          each record in lendingHistory
+            .request-card
+              h3= record.title
+              p
+                | Borrower: 
+                a.inline-link(href=`/user/${record.borrower_id}/profile`)= record.borrower_name
+              p Points: #{record.points_cost}
+              p
+                span.status-badge(class=`status-${record.status.toLowerCase()}`)= record.status
+              if record.return_condition
+                p Return Condition: #{record.return_condition}
+              a.details-btn(href=`/history/${record.id}`) View Details
+        else
+          p.no-results You have no lending history yet.
