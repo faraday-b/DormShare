@@ -89,11 +89,11 @@ CREATE TABLE IF NOT EXISTS ratings (
 );
 
 INSERT INTO users (username, email, password_hash, points) VALUES
-('j_doe23', 'j.doe@university.ac.uk', 'password123', 75),
-('amiller_sd', 'a.miller@university.ac.uk', 'password123', 120),
-('sam_lee99', 's.lee@university.ac.uk', 'password123', 50),
-('h_wilson', 'h.wilson@university.ac.uk', 'password123', 200),
-('robert_p', 'r.patel@university.ac.uk', 'password123', 85);
+('j_doe23', 'j.doe@roehampton.ac.uk', 'password123', 75),
+('amiller_sd', 'a.miller@roehampton.ac.uk', 'password123', 120),
+('sam_lee99', 's.lee@roehampton.ac.uk', 'password123', 50),
+('h_wilson', 'h.wilson@roehampton.ac.uk', 'password123', 200),
+('robert_p', 'r.patel@roehampton.ac.uk', 'password123', 85);
 
 INSERT INTO categories (name) VALUES
 ('Electronics'),
@@ -106,8 +106,8 @@ INSERT INTO categories (name) VALUES
 ('Sports'),
 ('Other');
 
-INSERT INTO items (title, description, category_id, user_id, points_required, status) VALUES
-('Laptop Charger', 'Dell charger for laptops', 1, 1, 10, 'Available'),
-('Blender', 'Kitchen blender in good condition', 2, 2, 15, 'Available'),
-('Textbook: Data Structures', 'Useful for CS students', 3, 3, 8, 'Available'),
-('Suit for Interview', 'Formal wear for interviews', 4, 4, 20, 'Available');
+INSERT INTO items (title, description, category_id, user_id, points_required, status, item_condition, pickup_location, availability_notes) VALUES
+('Laptop Charger', 'Dell charger for laptops', 1, 1, 10, 'Available', 'Good', 'Library', 'Available most weekdays.'),
+('Blender', 'Kitchen blender in good condition', 2, 2, 15, 'Available', 'Good', 'Student kitchen', 'Please return clean.'),
+('Textbook: Data Structures', 'Useful for CS students', 3, 3, 8, 'Available', 'Good', 'Library', 'Can lend for one week.'),
+('Suit for Interview', 'Formal wear for interviews', 4, 4, 20, 'Available', 'Good', 'Accommodation reception', 'Best for interview days or presentations.');
