@@ -8,32 +8,81 @@ block content
       .left-section
         h2.item-name= item.title
         .image-box
-          p Item Image
+          if item.image_data
+            img.item-detail-image(src=item.image_data, alt=`${item.title} image`)
+          else
+            p Item Image
 
       .right-section
         p
           strong Owner:
-          |  #{item.owner}
+          |  
+          a.inline-link(href=`/user/${item.owner_id}/profile`)= item.owner
 
         p
           strong Category:
-          |  #{item.category}
+          |  
+          span.category-badge(class=`category-${item.category.toLowerCase()}`)= item.category
 
         p
           strong Points Required:
           |  #{item.points_required}
 
+        if item.item_condition
+          p
+            strong Condition:
+            |  #{item.item_condition}
+
+        if item.pickup_location
+          p
+            strong Pickup Location:
+            |  #{item.pickup_location}
+
         p
           strong Status:
-          |  #{item.status}
+          |  
+          span.status-badge(class=`status-${item.status.toLowerCase()}`)= item.status
 
         .description-box
           h3 Description
           p= item.description
+          if item.availability_notes
+            h3 Availability Notes
+            p= item.availability_notes
 
         .request-row
-          if item.status === 'Available'
-            form(action=`/items/${item.id}/request`, method="POST")
+          if success
+            p.success-message= success
+
+          if error
+            p.error-message= error
+
+          if !currentUser
+            a.details-btn(href="/login") Login to Request
+          else if Number(currentUser.id) === Number(item.user_id)
+            button.request-btn.disabled-btn(type="button" disabled) Your Item
+            if item.status === "Available"
+              form(action=`/items/${item.id}/cancel-listing`, method="POST")
+                button.cancel-btn(type="submit") Cancel Listing
+          else if item.status === 'Available'
+            form(action=`/items/${item.id}/request`, method="POST", onsubmit=`return confirm('This item costs ${item.points_required} points. Do you want to continue?')`)
               button.request-btn(type="submit") Request Item
           else
             button.request-btn.disabled-btn(type="button" disabled) Not Available
+
+        if currentUser && Number(currentUser.id) !== Number(item.user_id)
+          .item-action-panel
+            h3 Message Owner
+            form(action=`/items/${item.id}/message`, method="POST")
+              .form-group
+                label(for="message_text") Message
+                textarea#message_text(name="message_text", required)
+              button.request-btn(type="submit") Send Message
+
+          .item-action-panel.report-panel
+            h3 Report Item
+            form(action=`/items/${item.id}/report`, method="POST")
+              .form-group
+                label(for="reason") Reason
+                textarea#reason(name="reason", placeholder="Explain the issue, for example damaged item, unsafe listing, or inappropriate content.", required)
+              button.report-btn(type="submit") Submit Report

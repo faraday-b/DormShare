@@ -10,15 +10,25 @@ const db = require("../services/db");
 // Route to display all users
 router.get("/users", async (req, res) => {
     try {
+        const search = (req.query.search || "").trim();
+        const params = [];
+        let sql = "SELECT id, username, email, points, is_banned FROM users WHERE is_deleted = 0";
+
+        if (search) {
+            sql += " AND (username LIKE ? OR email LIKE ?)";
+            params.push(`%${search}%`, `%${search}%`);
+        }
+
+        sql += " ORDER BY username";
+
         // Run SQL query to get all users from the database
-        const users = await db.query(
-            "SELECT id, username, email, points FROM users"
-        );
+        const users = await db.query(sql, params);
 
         // Render the users page and pass the data to it
         res.render("users", {
             pageTitle: "User List",
-            users: users
+            users: users,
+            search: search
         });
 
     } catch (err) {

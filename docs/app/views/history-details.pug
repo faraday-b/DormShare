@@ -1,0 +1,45 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title History Details
+
+    .details-card
+      .right-section
+        h2= record.title
+        p
+          strong Borrower:
+          |  #{record.borrower_name}
+        p
+          strong Lender:
+          |  #{record.lender_name}
+        p
+          strong Points Cost:
+          |  #{record.points_cost}
+        p
+          strong Status:
+          |  
+          span.status-badge(class=`status-${record.status.toLowerCase()}`)= record.status
+        p
+          strong Return Condition:
+          |  #{record.return_condition || "Not returned yet"}
+        if record.return_notes
+          p
+            strong Return Notes:
+            |  #{record.return_notes}
+
+        .description-box
+          h3 Item Description
+          p= record.description
+
+    .profile-card.ratings-card
+      h2 Reviews Between Borrower and Lender
+      if reviews.length
+        each review in reviews
+          .request-card
+            h3 #{review.rating}/5
+            p #{review.reviewer_name} reviewed #{review.reviewed_name}
+            if review.comment
+              p= review.comment
+      else
+        p.no-results No reviews between these users yet.

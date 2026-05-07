@@ -1,45 +1,58 @@
-doctype html
-html
-  head
-    title DormShare Listings
-    link(rel="stylesheet", href="/css/style.css")
-  body
-    .page-wrapper
-      nav.top-nav
-        a(href="/") Dorm Share
-        span |
-        a(href="/listings") Browse
-        span |
-        a(href="#") My Listings
-        span |
-        a(href="#") Profile
-        span |
-        a(href="#") Logout
+extends layout
 
-      .content-area
-        .search-box
-          form.search-form(method="GET", action="/listings")
-            label(for="search") Seach:
-            input#search(type="text", name="search")
-            button.search-icon(type="submit") 🔍
-            select(name="category")
-              option(value="") Category
-              option(value="Electronics") Electronics
-              option(value="Kitchen") Kitchen
-              option(value="Studying") Studying
-              option(value="Clothing") Clothing
+block content
+  .search-box
+    form.search-form(method="GET", action="/listings")
+      label(for="search") Search:
+      input#search(type="text", name="search", value=search || "")
+      button.search-icon(type="submit") Search
 
-        .listings-container
-          each item in listings
-            .listing-card
-              .listing-title= item.title
-              .listing-body
-                .image-box Item Image
+      select(name="category" onchange="this.form.submit()")
+        option(value="") Category
+        each category in categories
+          option(value=category.id selected=selectedCategory === String(category.id))= category.name
 
-                .listing-info
-                  p Category: #{item.category}
-                  p Points Required: #{item.points_required}
-                  p Status: #{item.status}
+      if search || selectedCategory
+        a.clear-filters(href="/listings") Clear
 
-                .listing-button
-                   a.details-btn(href=`/items/${item.id}`) View Details
+  .listings-container
+    if currentUser && recommendedItems && recommendedItems.length
+      .recommendations-panel
+        h2 Recommended For You
+        p Based on your points balance and previous borrowing activity.
+        each item in recommendedItems
+          a.recommendation-link(href=`/items/${item.id}`)
+            span= item.title
+            span #{item.points_required} pts
+
+    if search || selectedCategory
+      p.filter-summary
+        | Showing results
+        if search
+          |  for "#{search}"
+        if selectedCategory
+          |  in #{selectedCategoryName}
+
+    if listings.length
+      each item in listings
+        .listing-card
+          .listing-title= item.title
+          .listing-body
+            .image-box
+              if item.image_data
+                img.item-thumb(src=item.image_data, alt=`${item.title} image`)
+              else
+                span Item Image
+
+            .listing-info
+              p
+                span.category-badge(class=`category-${item.category.toLowerCase()}`)= item.category
+              p Owner: #{item.owner}
+              p Points Required: #{item.points_required}
+              p
+                span.status-badge(class=`status-${item.status.toLowerCase()}`)= item.status
+
+            .listing-button
+              a.details-btn(href=`/items/${item.id}`) View Details
+    else
+      p.no-results No items found.

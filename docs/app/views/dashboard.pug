@@ -1,0 +1,83 @@
+extends layout
+
+block content
+  .page-container.dashboard-page
+    .dashboard-hero
+      .dashboard-hero-text
+        h1 Welcome back, #{currentUser.username}
+        p Your DormShare dashboard shows your points, active requests, messages, and lending activity in one place.
+      .points-card
+        span.points-label Your Points
+        strong= currentUser.points
+
+    .dashboard-actions
+      a.home-btn.primary-btn(href="/listings") Browse Items
+      a.home-btn.secondary-btn(href="/items/new") Lend an Item
+      a.home-btn.secondary-btn(href="/items/my-listings") My Listings
+      a.home-btn.secondary-btn(href="/messages") Messages
+      a.home-btn.secondary-btn(href="/requests") Requests
+
+    .dashboard-stats
+      .dashboard-stat
+        span.stat-number= activeBorrowing.length
+        span.stat-label Active Borrows
+      .dashboard-stat
+        span.stat-number= activeLending.length
+        span.stat-label Active Lends
+      .dashboard-stat
+        span.stat-number= pendingMessages.length
+        span.stat-label Message Requests
+      .dashboard-stat
+        span.stat-number= availableListingsCount
+        span.stat-label Available Listings
+      .dashboard-stat
+        span.stat-number= completedSharesCount
+        span.stat-label Completed Shares
+
+    .requests-grid.dashboard-grid
+      section.requests-section
+        h2 Items You Are Borrowing
+        if activeBorrowing.length
+          each request in activeBorrowing
+            .request-card
+              h3= request.title
+              p Lender: #{request.lender_name}
+              p Points: #{request.points_cost}
+              p
+                span.status-badge(class=`status-${request.status.toLowerCase()}`)= request.status
+        else
+          p.no-results You do not have active borrow requests.
+        a.inline-link(href="/requests") View all requests
+
+      section.requests-section
+        h2 Requests For Your Items
+        if activeLending.length
+          each request in activeLending
+            .request-card
+              h3= request.title
+              p Borrower: #{request.borrower_name}
+              p Points: #{request.points_cost}
+              p
+                span.status-badge(class=`status-${request.status.toLowerCase()}`)= request.status
+        else
+          p.no-results No active lending requests right now.
+        a.inline-link(href="/requests") Manage lending requests
+
+      section.requests-section
+        h2 Message Requests
+        if pendingMessages.length
+          each message in pendingMessages
+            .request-card
+              h3 From #{message.sender_name}
+              if message.item_title
+                p About: #{message.item_title}
+              p.message-time= message.created_at
+        else
+          p.no-results You have no pending message requests.
+        a.inline-link(href="/messages") Open messages
+
+      section.requests-section
+        h2 Trust And Safety
+        p Keep item details honest, use messages for arrangements, and only rate users after a completed borrow or lend.
+        p Reports help remove unsafe behaviour if someone repeatedly damages items or acts unfairly.
+        a.inline-link(href="/reports") View reports

@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title Reports
+
+    if reports.length
+      .requests-section
+        each report in reports
+          .request-card
+            h3 Report ##{report.id}
+            if report.item_title
+              p Item: #{report.item_title}
+            p Reporter: #{report.reporter_name}
+            p Reported user: #{report.reported_name}
+            p Reason: #{report.reason}
+            p Status: #{report.status}
+            p User report count: #{report.report_count}
+            if report.is_banned
+              p.error-message This user is banned.
+    else
+      p.no-results No reports found.

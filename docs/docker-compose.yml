@@ -6,7 +6,7 @@ services:
     volumes:
       - .:/src
       - /src/node_modules
-    command: supervisor -e 'js,pug,html' index.js
+    command: supervisor -i db,node_modules -e 'js,pug,html' index.js
     ports:
       - "3000:3000"
     depends_on:

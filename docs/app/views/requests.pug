@@ -1,0 +1,58 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title Borrow Requests
+
+    if success
+      p.success-message= success
+
+    if error
+      p.error-message= error
+
+    .requests-grid
+      section.requests-section
+        h2 Items You Requested
+
+        if borrowedRequests.length
+          each request in borrowedRequests
+            .request-card
+              h3= request.title
+              p
+                | Lender: 
+                a.inline-link(href=`/user/${request.lender_id}/profile`)= request.lender_name
+              p Points Cost: #{request.points_cost}
+              p
+                span.status-badge(class=`status-${request.status.toLowerCase()}`)= request.status
+
+              if request.status === "Requested"
+                form(action=`/requests/${request.id}/cancel`, method="POST")
+                  button.cancel-btn(type="submit") Cancel Request
+        else
+          p.no-results You have not requested any items yet.
+
+      section.requests-section
+        h2 Requests For Your Items
+
+        if lendingRequests.length
+          each request in lendingRequests
+            .request-card
+              h3= request.title
+              p
+                | Borrower: 
+                a.inline-link(href=`/user/${request.borrower_id}/profile`)= request.borrower_name
+              p Points Cost: #{request.points_cost}
+              p
+                span.status-badge(class=`status-${request.status.toLowerCase()}`)= request.status
+
+              if request.status === "Requested"
+                form(action=`/requests/${request.id}/approve`, method="POST")
+                  button.request-btn(type="submit") Approve
+                form(action=`/requests/${request.id}/reject`, method="POST")
+                  button.cancel-btn(type="submit") Reject
+
+              if request.status === "Borrowed"
+                form(action=`/requests/${request.id}/return-good`, method="POST")
+                  button.request-btn(type="submit") Confirm Good Return
+        else
+          p.no-results No one has requested your items yet.

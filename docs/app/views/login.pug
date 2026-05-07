@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .auth-page
+    .auth-card
+      h1 Login
+
+      if error
+        p.error-message= error
+
+      form(action="/login", method="POST")
+        .form-group
+          label(for="email") Email
+          input#email(type="email", name="email", required)
+
+        .form-group
+          label(for="password") Password
+          input#password(type="password", name="password", required)
+
+        button.auth-btn(type="submit") Login
+
+      p.auth-link
+        | Do not have an account? 
+        a(href="/register") Create one

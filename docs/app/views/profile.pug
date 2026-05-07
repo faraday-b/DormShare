@@ -1,25 +1,125 @@
 extends layout
 
 block content
-  //- Navigation
-  .profile-nav(style="padding: 10px; display: flex; justify-content: space-between; align-items: center;")
+  .page-container
+    h1.page-title #{data.username}'s Profile
 
-  hr(style="border: 0; border-top: 1px solid #7eb36a; margin: 20px 0;")
+    if success
+      p.success-message Profile updated successfully.
 
-  //- Profile Card
-  .profile-card(style="border: 2px solid #7eb36a; padding: 30px; margin: 0 auto; max-width: 800px;")
-    .profile-header(style="display: flex; gap: 30px; align-items: flex-start;")
-      
-      //- Profile Picture
-      .image-placeholder(style="border: 1px solid #7eb36a; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; background: #f9f9f9;")
-        p(style="color: #666;") Profile Image
+    if rated
+      p.success-message Rating submitted successfully.
 
-      //- User Details
-      .profile-info(style="flex: 1;")
-        h1(style="margin-top: 0;") #{data.username}'s Profile
-        p(style="font-size: 1.2em; font-weight: bold; color: #00966b;") Balance: #{data.points} Points
-        
-        //- Listings and Reviews
-        div(style="margin-top: 20px; display: flex; gap: 10px;")
-          button(disabled style="background: #e0e0e0; border: 1px solid #999; padding: 10px; cursor: not-allowed;") View Listings
-          button(disabled style="background: #e0e0e0; border: 1px solid #999; padding: 10px; cursor: not-allowed;") Reviews
+    if messageSent
+      p.success-message Message sent successfully.
+
+    if messageError
+      p.error-message= messageError
+
+    if reported
+      p.success-message Report submitted successfully.
+
+    if reportError
+      p.error-message= reportError
+
+    if ratingError
+      p.error-message= ratingError
+
+    if deleteError
+      p.error-message= deleteError
+
+    .profile-card
+      .profile-header
+        .image-placeholder
+          if data.profile_image
+            img.profile-image(src=data.profile_image, alt=`${data.username} profile image`)
+          else
+            p Profile Image
+
+        .profile-info
+          p.points-balance Balance: #{data.points} Points
+          if isOwnProfile
+            p Email: #{data.email}
+          p Reports: #{data.report_count || 0}
+          if data.is_banned
+            p.error-message This user is banned.
+          if averageRating
+            p Average Rating: #{averageRating}/5 from #{ratings.length} rating(s)
+          else
+            p Average Rating: No ratings yet
+
+          if isOwnProfile
+            form.profile-form.image-upload-form(action=`/user/${data.id}/profile`, method="POST")
+              .form-group
+                label(for="username") Username
+                input#username(type="text", name="username", value=data.username, required)
+
+              .form-group
+                label(for="email") Email
+                input#email(type="email", name="email", value=data.email, required)
+
+              .form-group
+                label(for="profile_image_file") Profile Image
+                input#profile_image_file.image-file-input(type="file", accept="image/*", data-target="profile_image", data-preview="profile-preview")
+                input#profile_image(type="hidden", name="profile_image")
+
+              .upload-preview#profile-preview
+                span New image preview
+
+              button.auth-btn(type="submit") Save Changes
+
+            .profile-form.danger-panel
+              h3 Delete Account
+              p Deleting your account removes your profile from DormShare and cancels any active item listings or pending requests.
+              form(action=`/user/${data.id}/delete`, method="POST", onsubmit="return confirm('Are you sure you want to delete your DormShare account? This cannot be undone.')")
+                button.report-btn(type="submit") Delete Account
+
+          else if currentUser
+            .profile-form
+              h3 Message User
+              form(action=`/user/${data.id}/message`, method="POST")
+                .form-group
+                  label(for="message_text") Message
+                  textarea#message_text(name="message_text", required)
+                button.auth-btn(type="submit") Send Message
+
+            if canRate
+              form.profile-form(action=`/user/${data.id}/rate`, method="POST")
+                .form-group
+                  label(for="rating") Rate this user
+                  select#rating(name="rating", required)
+                    option(value="") Choose rating
+                    option(value="5") 5 - Excellent
+                    option(value="4") 4 - Good
+                    option(value="3") 3 - Okay
+                    option(value="2") 2 - Poor
+                    option(value="1") 1 - Very poor
+
+                .form-group
+                  label(for="comment") Comment
+                  textarea#comment(name="comment")
+
+                button.auth-btn(type="submit") Submit Rating
+            else
+              p.no-results You can rate this user after a completed returned borrow or lend.
+
+            .profile-form.report-panel
+              h3 Report User
+              form(action=`/user/${data.id}/report`, method="POST")
+                .form-group
+                  label(for="reason") Reason
+                  textarea#reason(name="reason", placeholder="Explain the issue, for example unsafe behaviour, item damage, or inappropriate conduct.", required)
+                button.report-btn(type="submit") Submit Report
+
+    .profile-card.ratings-card
+      h2 Ratings
+      if ratings.length
+        each rating in ratings
+          .request-card
+            h3 #{rating.rating}/5 from #{rating.reviewer_name}
+            if rating.comment
+              p= rating.comment
+      else
+        p.no-results No ratings yet.
+
+  script(src="/js/image-upload.js")

@@ -1,0 +1,76 @@
+extends layout
+
+block content
+  .page-container
+    h1.page-title Lend an Item
+    p.page-intro Share an item with other students and earn points when it is returned in good condition.
+
+    .form-card
+      if error
+        p.error-message= error
+
+      form.image-upload-form(action="/items/new", method="POST")
+        .form-group
+          label(for="title") Item Name
+          input#title(type="text", name="title", required)
+          p.field-help Example: laptop charger, textbook, blender, rain jacket.
+
+        .form-group
+          label(for="description") Description
+          textarea#description(name="description", required)
+          p.field-help Mention condition, size, brand, or any important details.
+
+        .form-group
+          label(for="category_id") Category
+          select#category_id(name="category_id", required)
+            option(value="") Choose category
+            each category in categories
+              option(value=category.id)= category.name
+
+        .form-group
+          label(for="item_condition") Condition
+          select#item_condition(name="item_condition", required)
+            option(value="") Choose condition
+            option(value="New") New
+            option(value="Good") Good
+            option(value="Used") Used
+            option(value="Needs care") Needs care
+          p.field-help Be honest so borrowers know what to expect.
+
+        .form-group
+          label(for="pickup_location") Pickup Location
+          select#pickup_location(name="pickup_location", required)
+            option(value="") Choose pickup location
+            option(value="Library") Library
+            option(value="Student Union") Student Union
+            option(value="Accommodation Reception") Accommodation Reception
+            option(value="Campus Cafe") Campus Cafe
+            option(value="Other") Other
+          p.field-help Choose a safe public campus location.
+
+        .form-group
+          label(for="points_required") Points Required
+          input#points_required(type="number", name="points_required", min="1", required)
+          p.field-help Choose a fair points cost based on value and demand.
+
+        .form-group
+          label(for="availability_notes") Availability Notes
+          textarea#availability_notes(name="availability_notes", placeholder="Example: Available weekdays after 4pm")
+          p.field-help Add times or instructions that help borrowers arrange pickup.
+
+        .form-group
+          label(for="item_image_file") Item Image
+          input#item_image_file.image-file-input(type="file", accept="image/*", data-target="item_image", data-preview="item-preview")
+          input#item_image(type="hidden", name="item_image")
+          p.field-help Upload a clear photo so borrowers know what they are requesting.
+
+        .upload-preview#item-preview
+          span No image selected
+
+        button.auth-btn(type="submit") List Item
+
+    .guidelines-box
+      h2 Lending Guidelines
+      p Only list safe, appropriate items. Be clear about condition, agree return expectations, and use public campus pickup locations where possible.
+
+  script(src="/js/image-upload.js")
